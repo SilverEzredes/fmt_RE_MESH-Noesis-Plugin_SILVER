@@ -1,11 +1,11 @@
 try ( destroydialog formNoesisCMD; clearlistener() ) catch ()
 (
 	--RE Engine MESH Noesis CMD tool
-	--Version: v0.48
-	--Last Release: March 10, 2024
+	--Version: v0.49
+	--Last Release: July 02, 2024
 	--Authors: alphaZomega, mariokart64n
 	
-	local noesis_path = 		"C:\\Program Files\\Noesis\\Noesis.exe"
+	local noesis_path = 		"C:\\Program Files\\_Noesis\\Noesis.exe"
 	
 	local re2_pak_location = 	"F:\\modmanager\\REtool\\RE2_chunk_000\\natives\\x64\\"
 	local re3_pak_location = 	"F:\\modmanager\\REtool\\RE3_chunk_000\\natives\\stm\\"
@@ -22,6 +22,7 @@ try ( destroydialog formNoesisCMD; clearlistener() ) catch ()
 	--local rt_pak_location = 	"F:\\modmanager\\REtool\\RE2RT_chunk_000\\natives\\stm\\"
 	local aj_aat_pak_location = "F:\\modmanager\\REtool\\AJ_AAT_chunk_000\\natives\\stm\\"
 	local dd2_pak_location = "F:\\modmanager\\REtool\\DD2_chunk_000\\natives\\stm\\"
+	local kg_potg_pak_location = "F:\\modmanager\\REtool\\KG_PotG_chunk_000\\natives\\stm\\"
 	local show_ReWrite2 = true
 	
 	local current_pak_location = re2_pak_location
@@ -102,7 +103,7 @@ try ( destroydialog formNoesisCMD; clearlistener() ) catch ()
 		)  
 	) 
 	
-	local gamesList = #( "REVerse", "MHRSunbreak", "RE2", "RE3", "RE4", "DMC5", "RE8", "RE7 RT", "RE7", "RE2 RT", "RE3 RT", "MHRise", "SF6", "AJ_AAT", "DD2")
+	local gamesList = #( "REVerse", "MHRSunbreak", "RE2", "RE3", "RE4", "DMC5", "RE8", "RE7 RT", "RE7", "RE2 RT", "RE3 RT", "MHRise", "SF6", "AJ_AAT", "DD2", "KG_PotG")
 	local currentItem = "RE4"
 	local currentItemIdx = 5
 	local currentItemIdx2 = 5
@@ -126,6 +127,7 @@ try ( destroydialog formNoesisCMD; clearlistener() ) catch ()
 				"REVerse": ".20"
 				"AJ_AAT": ".37"
 				"DD2": ".40"
+				"KG_PotG": ".40"
 				default: ""
 			)
 		)
@@ -465,7 +467,7 @@ try ( destroydialog formNoesisCMD; clearlistener() ) catch ()
 	
 	--print current_pak_location
 	
-	rollout formNoesisCMD "REEM Noesis 0.47" (
+	rollout formNoesisCMD "REEM Noesis 0.49" (
 		
 		local dist = 1.0
 		
@@ -570,6 +572,7 @@ try ( destroydialog formNoesisCMD; clearlistener() ) catch ()
 						"REVerse": ".mesh.2102020001"
 						"AJ_AAT": ".mesh.230612127"
 						"DD2": ".mesh.231011879"
+						"KG_PotG": ".mesh.240306278"
 						default: ""
 					)
 				current_pak_location = case currentItem of 
@@ -589,6 +592,7 @@ try ( destroydialog formNoesisCMD; clearlistener() ) catch ()
 						"REVerse": reve_pak_location
 						"AJ_AAT": aj_aat_pak_location
 						"DD2": dd2_pak_location
+						"KG_PotG": kg_potg_pak_location
 						default: ""
 					)
 			) catch ( undefined )
@@ -698,7 +702,7 @@ try ( destroydialog formNoesisCMD; clearlistener() ) catch ()
 						if thisExt != lastExt then (
 							lastExt = thisExt
 							--This list must have the same order as gamesList:
-							changeCurrentGame ( findItem #(".2102020001", ".2109148288", ".1808312334", ".1902042334", ".221108797", ".1808282334", ".2101050001", ".220128762", ".32", ".2109108288", ".2109108288", ".2008058288", ".230110883", ".230612127", ".231011879", ".231011879") lastExt)  
+							changeCurrentGame ( findItem #(".2102020001", ".2109148288", ".1808312334", ".1902042334", ".221108797", ".1808282334", ".2101050001", ".220128762", ".32", ".2109108288", ".2109108288", ".2008058288", ".230110883", ".230612127", ".231011879", ".240306278") lastExt)  
 						)
 						
 						local objSelected = selection as array
@@ -853,6 +857,7 @@ try ( destroydialog formNoesisCMD; clearlistener() ) catch ()
 					"REVerse": ".mesh.2102020001"
 					"AJ_AAT": ".mesh.231011879"
 					"DD2": ".mesh.231011879"
+					"KG_PotG": ".mesh.240306278"
 					default: ""
 				)
 			current_extension2 = replace lbl_currentExt2.caption 1 5 ""
@@ -932,7 +937,7 @@ try ( destroydialog formNoesisCMD; clearlistener() ) catch ()
 		
 		on btn_import pressed do (
 			if noesisComponentsFound() then (
-				cmd = getOpenFileName types:"RE Engine MESH/MOTLIST|*.1808282334;*.1902042334;*.221108797;*.2010231143;*.2008058288;*.2109148288;*.2109108288;*.2101050001;*.32;*.220128762;*.220721329;*.1808312334;*.2102020001;*.230110883;*.230612127;*.231011879;*.60;*.85;*.99;*.484;*.486;*.524;*.528;*.653;*.663;*.750;*.751|All|*.*|"
+				cmd = getOpenFileName types:"RE Engine MESH/MOTLIST|*.1808282334;*.1902042334;*.221108797;*.2010231143;*.2008058288;*.2109148288;*.2109108288;*.2101050001;*.32;*.220128762;*.220721329;*.1808312334;*.2102020001;*.230110883;*.230612127;*.231011879;*.240306278;*.60;*.85;*.99;*.484;*.486;*.524;*.528;*.653;*.663;*.750;*.751;*.854|All|*.*|"
 				Import_MESH cmd undefined
 			) else (messagebox "Failed to Locate Noesis!")
 		)
@@ -957,6 +962,7 @@ try ( destroydialog formNoesisCMD; clearlistener() ) catch ()
 						"REVerse" : getSaveFileName types:"REVerse(*.2102020001)|*.2102020001"
 						"AJ_AAT" : getSaveFileName types: "AJ_AAT(*.230612127)|*.230612127|"
 						"DD2" : getSaveFileName types: "DD2(*.231011879)|*.231011879|"
+						"KG_PotG" : getSaveFileName types: "KG_PotG(*.240306278)|*.240306278|"
 						default: getSaveFileName types:" \
 							DMC5(*.1808282334)|*.1808282334| \
 							RE2(*.1808312334)|*.1808312334| \
@@ -972,10 +978,11 @@ try ( destroydialog formNoesisCMD; clearlistener() ) catch ()
 							SF6(*.230110883)|*.230110883| \
 							REVerse(*.2102020001)|*.2102020001| \
 							AJ_AAT(*.230612127)|*.230612127|  \
-							DD2:(*.mesh.231011879)|*231011879|"
+							DD2:(*.mesh.231011879)|*231011879| \
+							KG_PotG(*.240306278)|*.240306278|"
 					) 
 				) else
-					cmd = getOpenFileName types:"RE Engine Model|*.1808282334;*.1902042334;*.221108797;*.2010231143;*.2008058288;*.2109148288;*.2109108288;*.2101050001;*.32;*.220128762;*.1808312334;*.220721329;*.2102020001;*.230110883;*.230612127;*.231011879|All|*.*|"
+					cmd = getOpenFileName types:"RE Engine Model|*.1808282334;*.1902042334;*.221108797;*.2010231143;*.2008058288;*.2109148288;*.2109108288;*.2101050001;*.32;*.220128762;*.1808312334;*.220721329;*.2102020001;*.230110883;*.230612127;*.231011879;*.240306278|All|*.*|"
 					
 				if cmd != undefined and cmd != "" then (
 					local fbx_path = (getFilenamePath cmd) + (getFilenameFile (getFilenameFile cmd))
@@ -1436,5 +1443,5 @@ try ( destroydialog formNoesisCMD; clearlistener() ) catch ()
 		
 	)
 	createdialog formNoesisCMD
-	--cui.RegisterDialogBar formNoesisCMD style:#(#cui_dock_all, #cui_floatable, #cui_handles)
+	cui.RegisterDialogBar formNoesisCMD style:#(#cui_dock_all, #cui_floatable, #cui_handles)
 )
