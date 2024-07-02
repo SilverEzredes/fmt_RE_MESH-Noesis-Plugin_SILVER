@@ -1,7 +1,7 @@
 #RE Engine [PC] - ".mesh" plugin for Rich Whitehouse's Noesis
 #Authors: alphaZomega, Gh0stblade 
 #Special thanks: Chrrox, SilverEzredes, Enaium 
-Version = "v3.25 (June 28, 2024)"
+Version = "v3.26 (July 02, 2024)"
 
 
 #Options: These are global options that change or enable/disable certain features
@@ -22,7 +22,7 @@ bRE4Export					= True					#Enable or disable export of mesh.221108797 from the e
 bExoExport					= True					#Enable or disable export of mesh.220907984 from the export list (and tex.40)
 bApolloExport				= True					#Enable or disable export of mesh.230612127 from the export list (and tex.719230324)
 bDD2Export					= True					#Enable or disable export of mesh.231011879 from the export list (and tex.760230703)
-
+bKGPotGExport				= True					#Enable or disable export of mesh.240306278 from the export list (and tex.231106777)	
 
 #Mesh Global
 fDefaultMeshScale 			= 100.0 				#Override mesh scale (default is 1.0)
@@ -97,13 +97,13 @@ def registerNoesisTypes():
 		noesis.addOption(handle, "-vfx", "Export as VFX mesh", 0)
 		return handle
 		
-	handle = noesis.register("RE Engine MESH [PC]", ".1902042334;.1808312334;.1808282334;.2008058288;.2102020001;.2101050001;.2109108288;.2109148288;.220128762;.220301866;.220721329;.221108797;.220907984;.230110883;.230612127;.231011879;.NewMesh")
+	handle = noesis.register("RE Engine MESH [PC]", ".1902042334;.1808312334;.1808282334;.2008058288;.2102020001;.2101050001;.2109108288;.2109148288;.220128762;.220301866;.220721329;.221108797;.220907984;.230110883;.230612127;.231011879;.240306278;.NewMesh")
 	noesis.setHandlerTypeCheck(handle, meshCheckType)
 	noesis.setHandlerLoadModel(handle, meshLoadModel)
 	noesis.addOption(handle, "-noprompt", "Do not prompt for MDF file", 0)
 	noesis.setTypeSharedModelFlags(handle, (noesis.NMSHAREDFL_WANTGLOBALARRAY))
 
-	handle = noesis.register("RE Engine Texture [PC]", ".10;.190820018;.11;.8;.28;.stm;.30;.31;.34;.35;.36;.40;.143221013;.143230113;.719230324;.760230703")
+	handle = noesis.register("RE Engine Texture [PC]", ".10;.190820018;.11;.8;.28;.stm;.30;.31;.34;.35;.36;.40;.143221013;.143230113;.231106777;.719230324;.760230703")
 	noesis.setHandlerTypeCheck(handle, texCheckType)
 	noesis.setHandlerLoadRGBA(handle, texLoadDDS)
 
@@ -111,7 +111,7 @@ def registerNoesisTypes():
 	noesis.setHandlerTypeCheck(handle, UVSCheckType)
 	noesis.setHandlerLoadModel(handle, UVSLoadModel)
 	
-	handle = noesis.register("RE Engine SCN [PC]", ".19;.20")
+	handle = noesis.register("RE Engine SCN [PC]", ".19;.20;.21")
 	noesis.setHandlerTypeCheck(handle, SCNCheckType)
 	noesis.setHandlerLoadModel(handle, SCNLoadModel)
 	
@@ -247,6 +247,15 @@ def registerNoesisTypes():
 		noesis.setHandlerTypeCheck(handle, meshCheckType)
 		noesis.setHandlerWriteModel(handle, meshWriteModel)
 		addOptions(handle)
+
+	if bKGPotGExport:
+		handle = noesis.register("Kunitsu-Gami: Path of the Goddess Texture [PC]", ".231106777")
+		noesis.setHandlerTypeCheck(handle, texCheckType)
+		noesis.setHandlerWriteRGBA(handle, texWriteRGBA);
+		handle = noesis.register("Kunitsu-Gami: Path of the Goddess Mesh", (".240306278"))
+		noesis.setHandlerTypeCheck(handle, meshCheckType)
+		noesis.setHandlerWriteModel(handle, meshWriteModel)
+		addOptions(handle)
 		
 	noesis.logPopup()
 	return 1
@@ -278,6 +287,7 @@ formats = {
 	"RE4": 			{ "modelExt": ".221108797",  "texExt": ".143221013", "mmtrExt": ".221007879",  "nDir": "stm", "mdfExt": ".mdf2.32", "meshVersion": 3, "mdfVersion": 4, "mlistExt": ".663", "meshMagic":220822879, "motionIDsData":[72,8] },
 	"AJ_AAT": 		{ "modelExt": ".230612127",  "texExt": ".719230324", "mmtrExt": ".230815080",  "nDir": "stm", "mdfExt": ".mdf2.37", "meshVersion": 3, "mdfVersion": 4, "mlistExt": ".750", "meshMagic":230406984, "motionIDsData":[72,8] },
 	"DD2": 			{ "modelExt": ".231011879",  "texExt": ".760230703", "mmtrExt": ".230815080",  "nDir": "stm", "mdfExt": ".mdf2.40", "meshVersion": 3, "mdfVersion": 4, "mlistExt": ".751", "meshMagic":230517984, "motionIDsData":[72,8] },
+	"KG_PotG":		{ "modelExt": ".240306278",  "texExt": ".231106777", "mmtrExt": ".240312225",  "nDir": "stm", "mdfExt": ".mdf2.40", "meshVersion": 3, "mdfVersion": 4, "mlistExt": ".854", "meshMagic":230727984, "motionIDsData":[72,8] },
 }
 
 extToFormat = { #incomplete, just testing
@@ -1372,7 +1382,7 @@ dialogOptions = DialogOptions()
 
 DoubleClickTimer = namedtuple("DoubleClickTimer", "name idx timer")
 
-gamesList = [ "RE7", "RE7RT", "RE2", "RERT", "RE3", "RE4", "RE8", "MHRSunbreak", "DMC5", "SF6", "ReVerse", "ExoPrimal", "AJ_AAT", "DD2" ]
+gamesList = [ "RE7", "RE7RT", "RE2", "RERT", "RE3", "RE4", "RE8", "MHRSunbreak", "DMC5", "SF6", "ReVerse", "ExoPrimal", "AJ_AAT", "DD2", "KG_PotG" ]
 fullGameNames = [
 	"Resident Evil 7",
 	"Resident Evil 7 RT",
@@ -1388,6 +1398,7 @@ fullGameNames = [
 	"ExoPrimal",
 	"Apollo Justice AAT",
 	"Dragon's Dogma 2",
+	"Kunitsu-Gami: Path of the Goddess",
 ]
 		
 class openOptionsDialogImportWindow:
@@ -2966,7 +2977,7 @@ def setOffsets(ver):
 	bsIndicesOffLocation = 		112 if ver < 3 else 128
 	namesOffsLocation = 		120 if ver < 3 else 144
 	
-	if sGameName == "AJ_AAT" or sGameName == "DD2":
+	if sGameName == "AJ_AAT" or sGameName == "DD2" or sGameName == "KG_PotG":
 		namesOffsLocation = 136 # on unrigged meshes its still 144
 	#if isExoPrimal:
 	#	nodesIndicesOffsLocation = 104
@@ -3044,6 +3055,9 @@ class meshFile(object):
 		elif (meshVersion == 230517984 or self.path.find(".231011879") != -1): #DD2
 			isMeshVer3 = True
 			sGameName = "DD2"
+		elif self.path.find(".240306278") != -1:
+			isMeshVer3 = True
+			sGameName = "KG_PotG"
 		
 	'''MDF IMPORT ========================================================================================================================================================================'''
 	def createMaterials(self, matCount):
@@ -4405,6 +4419,9 @@ def meshWriteModel(mdl, bs):
 	elif ext.find(".231011879") != -1:
 		sGameName = "DD2"
 		isMeshVer3 = True
+	elif ext.find(".240306278") != -1:
+		sGameName = "KG_PotG"
+		isMeshVer3 = True
 		
 	setOffsets(formats[sGameName]["meshVersion"])
 	
@@ -4463,7 +4480,7 @@ def meshWriteModel(mdl, bs):
 	extension = os.path.splitext(rapi.getInputName())[1]
 	vertElemCount = 3 
 	
-	if sGameName == "AJ_AAT" or sGameName == "DD2":
+	if sGameName == "AJ_AAT" or sGameName == "DD2" or sGameName == "KG_PotG":
 		#namesOffsLocation = 136 if bDoSkin else 144
 		isDD2Mesh = True
 
@@ -4655,7 +4672,7 @@ def meshWriteModel(mdl, bs):
 		
 		if isMeshVer3:
 			f.seek(232)
-			if sGameName == "AJ_AAT" or sGameName == "DD2":
+			if sGameName == "AJ_AAT" or sGameName == "DD2" or sGameName == "KG_PotG":
 				f.seek(f.readUInt64())
 		elif sGameName == "RERT" or sGameName == "ReVerse" or sGameName == "MHRise" or sGameName == "RE8":
 			f.seek(192)
@@ -4785,7 +4802,7 @@ def meshWriteModel(mdl, bs):
 		
 		#print(newMainMeshes)
 		
-		LOD1Offs = 176 if (sGameName == "DD2" or sGameName == "AJ_AAT") else 168 if isMeshVer3 else 128 if (sGameName == "RERT" or sGameName == "RE8" or sGameName == "MHRise") else 136
+		LOD1Offs = 176 if (sGameName == "DD2" or sGameName == "AJ_AAT" or sGameName == "KG_PotG") else 168 if isMeshVer3 else 128 if (sGameName == "RERT" or sGameName == "RE8" or sGameName == "MHRise") else 136
 		
 		#header:
 		bs.writeUInt(1213416781) #MESH
@@ -4796,7 +4813,7 @@ def meshWriteModel(mdl, bs):
 		
 		if isMeshVer3:
 			bs.writeUByte(3) #flag
-			if sGameName == "DD2" or sGameName == "AJ_AAT":
+			if sGameName == "DD2" or sGameName == "AJ_AAT" or sGameName == "KG_PotG":
 				bs.writeUByte(130) #solvedOffset
 				bs.writeUShort(84) #uknSF6
 			else:
@@ -4821,7 +4838,7 @@ def meshWriteModel(mdl, bs):
 			bs.writeUInt64(0) #namesOffs
 			bs.writeUInt64(0) #verticesOffset
 			bs.writeUInt64(0) #ukn4/padding
-			if sGameName == "DD2":
+			if sGameName == "DD2" or sGameName == "KG_PotG":
 				bs.writeUInt64(0) #ukn5/padding
 			
 		else:
@@ -5495,7 +5512,7 @@ def meshWriteModel(mdl, bs):
 	
 	fileEnd = faceDataEnd
 	
-	if sGameName == "DD2" and bDoSkin:
+	if sGameName == "DD2" or sGameName == "KG_PotG" and bDoSkin:
 		bs.seek(12)
 		bs.writeUInt(2303293740) #Unknown
 		
