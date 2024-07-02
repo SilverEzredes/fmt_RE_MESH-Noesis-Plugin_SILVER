@@ -13,6 +13,7 @@ A plugin for Rich Whitehouse's Noesis to import and export RE Engine meshes, tex
 - ExoPrimal
 - Apollo Justice: Ace Attorney Trilogy
 - Dragon's Dogma 2
+- Kunitsu-Gami: Path of the Goddess
 
 
 ## INSTALLATION:
