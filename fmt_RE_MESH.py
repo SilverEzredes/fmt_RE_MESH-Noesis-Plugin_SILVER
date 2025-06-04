@@ -1,11 +1,11 @@
 #RE Engine [PC] - ".mesh" plugin for Rich Whitehouse's Noesis
 #Authors: alphaZomega, Gh0stblade 
 #Special thanks: Chrrox, SilverEzredes, Enaium 
-Version = "v3.28 (September 21, 2024)"
+Version = "v3.29-SILVER (June 4, 2025)"
 
 #Changelog:
-#- Fixed motlist.854 reading
-
+# - Added support for new SF6 texture format.
+# - Fixed a bug where some animated textures wouldn't load.
 
 
 #Options: These are global options that change or enable/disable certain features
@@ -21,7 +21,8 @@ bREVExport 					= True					#Enable or disable export of mesh.2102020001 from the
 bRE8Export 					= True					#Enable or disable export of mesh.2101050001 from the export list (and tex.30)
 bMHRiseExport 				= False					#Enable or disable export of mesh.2008058288 from the export list (and tex.28) 
 bMHRiseSunbreakExport 		= True					#Enable or disable export of mesh.2109148288 from the export list (and tex.28)
-bSF6Export					= True					#Enable or disable export of mesh.230110883 from the export list (and tex.143230113)
+bSF6Export					= True					#Enable or disable export of mesh.230110883 from the export list (and tex.241101895)
+bSF6LegacyTexExport			= True					#Enable or disable export of legacy SF6 tex.143230113 from the export list
 bRE4Export					= True					#Enable or disable export of mesh.221108797 from the export list (and tex.143221013)
 bExoExport					= True					#Enable or disable export of mesh.220907984 from the export list (and tex.40)
 bApolloExport				= True					#Enable or disable export of mesh.230612127 from the export list (and tex.719230324)
@@ -109,7 +110,7 @@ def registerNoesisTypes():
 	noesis.addOption(handle, "-noprompt", "Do not prompt for MDF file", 0)
 	noesis.setTypeSharedModelFlags(handle, (noesis.NMSHAREDFL_WANTGLOBALARRAY))
 
-	handle = noesis.register("RE Engine Texture [PC]", ".10;.190820018;.11;.8;.28;.stm;.30;.31;.34;.35;.36;.40;.143221013;.143230113;.719230324;.760230703;.240606151")
+	handle = noesis.register("RE Engine Texture [PC]", ".10;.190820018;.11;.8;.28;.stm;.30;.31;.34;.35;.36;.40;.143221013;.143230113;.719230324;.760230703;.240606151;.241101895")
 	noesis.setHandlerTypeCheck(handle, texCheckType)
 	noesis.setHandlerLoadRGBA(handle, texLoadDDS)
 
@@ -209,14 +210,20 @@ def registerNoesisTypes():
 		noesis.setHandlerWriteModel(handle, meshWriteModel)
 		addOptions(handle)
 	
-	if bSF6Export:
-		handle = noesis.register("Street Fighter 6 Texture [PC]", ".143230113;")
-		noesis.setHandlerTypeCheck(handle, texCheckType)
-		noesis.setHandlerWriteRGBA(handle, texWriteRGBA);
+	if bSF6Export or bSF6LegacyTexExport:
 		handle = noesis.register("Street Fighter 6 Mesh", (".230110883"))
 		noesis.setHandlerTypeCheck(handle, meshCheckType)
 		noesis.setHandlerWriteModel(handle, meshWriteModel)
 		addOptions(handle)
+		if bSF6Export:
+			handle = noesis.register("Street Fighter 6 Texture [PC]", ".241101895")
+			noesis.setHandlerTypeCheck(handle, texCheckType)
+			noesis.setHandlerWriteRGBA(handle, texWriteRGBA);
+		if bSF6LegacyTexExport:
+			handle = noesis.register("Street Fighter 6 Legacy Texture [PC]", ".143230113")
+			noesis.setHandlerTypeCheck(handle, texCheckType)
+			noesis.setHandlerWriteRGBA(handle, texWriteRGBA);
+		
 		
 	if bRE4Export:
 		handle = noesis.register("RE4 Remake Texture [PC]", ".143221013")
@@ -289,7 +296,7 @@ formats = {
 	"ReVerse":		{ "modelExt": ".2102020001", "texExt": ".31", 		 "mmtrExt": ".2108110001", "nDir": "stm", "mdfExt": ".mdf2.20", "meshVersion": 2, "mdfVersion": 3, "mlistExt": ".500", "meshMagic":2020091500, "motionIDsData":[24,8] },
 	"RERT": 		{ "modelExt": ".2109108288", "texExt": ".34", 		 "mmtrExt": ".2109101635", "nDir": "stm", "mdfExt": ".mdf2.21", "meshVersion": 2, "mdfVersion": 3, "mlistExt": ".524", "meshMagic":21041600, "motionIDsData":[72,8] },
 	"RE7RT": 		{ "modelExt": ".220128762",  "texExt": ".35", 		 "mmtrExt": ".2109101635", "nDir": "stm", "mdfExt": ".mdf2.21", "meshVersion": 2, "mdfVersion": 3, "mlistExt": ".524", "meshMagic":21041600, "motionIDsData":[72,8] },
-	"SF6": 			{ "modelExt": ".230110883",  "texExt": ".143230113", "mmtrExt": ".221102761",  "nDir": "stm", "mdfExt": ".mdf2.31", "meshVersion": 3, "mdfVersion": 4, "mlistExt": ".653", "meshMagic":230403828, "motionIDsData":[72,8] },
+	"SF6": 			{ "modelExt": ".230110883",  "texExt": [".143230113", ".241101895"], "mmtrExt": ".221102761",  "nDir": "stm", "mdfExt": ".mdf2.31", "meshVersion": 3, "mdfVersion": 4, "mlistExt": ".653", "meshMagic":230403828, "motionIDsData":[72,8] },
 	"ExoPrimal": 	{ "modelExt": ".220907984",  "texExt": ".40", 		 "mmtrExt": ".221007878",  "nDir": "stm", "mdfExt": ".mdf2.31", "meshVersion": 3, "mdfVersion": 4, "mlistExt": ".643", "meshMagic":220705151, "motionIDsData":[72,8] },
 	"RE4": 			{ "modelExt": ".221108797",  "texExt": ".143221013", "mmtrExt": ".221007879",  "nDir": "stm", "mdfExt": ".mdf2.32", "meshVersion": 3, "mdfVersion": 4, "mlistExt": ".663", "meshMagic":220822879, "motionIDsData":[72,8] },
 	"AJ_AAT": 		{ "modelExt": ".230612127",  "texExt": ".719230324", "mmtrExt": ".230815080",  "nDir": "stm", "mdfExt": ".mdf2.37", "meshVersion": 3, "mdfVersion": 4, "mlistExt": ".750", "meshMagic":230406984, "motionIDsData":[72,8] },
@@ -970,26 +977,31 @@ def texLoadDDS(data, texList, texName=""):
 	version = bs.readUInt()
 	width = bs.readUShort()
 	height = bs.readUShort()
-	unk00 = bs.readUShort()
+	depth = bs.readUShort()
+
 	if version == 190820018:
 		version = 10
 	if version == 143221013:
 		version = 36
 	
 	if version > 27:
+		isImageNum256 = False
 		numImages = bs.readUByte()
+		if numImages == 0:
+			numImages = 256
+			isImageNum256 = True
 		oneImgMipHdrSize = bs.readUByte()
 		mipCount = int(oneImgMipHdrSize / 16)
 	else:
 		mipCount = bs.readUByte()
 		numImages = bs.readUByte()
-	
+
 	format = bs.readUInt()
-	unk02 = bs.readUInt()
-	unk03 = bs.readUInt()
+	tile = bs.readUInt()
+	isStreaming = bs.readUInt()
 	unk04 = bs.readUInt()
 	
-	if version > 27:
+	if version > 27: # SILVER: Swizzle stuff
 		bs.seek(8,1)
 	
 	mipData = []
@@ -1003,6 +1015,8 @@ def texLoadDDS(data, texList, texName=""):
 	formatName = texFormatNames[format]
 	bpp = fmtNameToBpp[formatName]
 	width = int((mipDataImg[0][1] / bpp) * 2)
+	if isImageNum256:
+		width = int((mipDataImg[0][1] / bpp) * 4)
 	print(formatName, bpp)
 	
 	texFormat = noesis.NOESISTEX_RGBA32
@@ -1011,7 +1025,7 @@ def texLoadDDS(data, texList, texName=""):
 	for i in range(numImages):
 		mipWidth = width
 		mipHeight = height
-		
+
 		for j in range(mipCount):
 			try:
 				bs.seek(mipData[i][j][0])
@@ -1040,7 +1054,7 @@ def texLoadDDS(data, texList, texName=""):
 				mipWidth = int(mipWidth / 2)
 			if mipHeight > 4: 
 				mipHeight = int(mipHeight / 2)
-				
+			
 	return tex
 	
 def getNoesisDDSType(imgType):
@@ -1056,20 +1070,30 @@ def getNoesisDDSType(imgType):
 	elif imgType == 61: ddsFmt = "r8"
 	return ddsFmt
 
-def findSourceTexFile(version_no, outputName=None):
+def findSourceTexFile(version_no, outputName=None): #SILVER: Updated the tex exporter so it can use lists and strings | 06/04/25
 	newTexName = outputName or rapi.getOutputName().lower()
-	while newTexName.find("out.") != -1: 
-		newTexName = newTexName.replace("out.",".")
+
+	while newTexName.find("out.") != -1:
+		newTexName = newTexName.replace("out.", ".")
 	newTexName =  newTexName.replace(".dds","").replace(".tex","").replace(".jpg","").replace(".png","").replace(".tga","").replace(".gif","")
+
 	for gameName, tbl in formats.items():
-		newTexName = newTexName.replace(tbl["texExt"], "")
+		texExts = tbl["texExt"]
+		if isinstance(texExts, str):
+			newTexName = newTexName.replace(texExts, "")
+		else:
+			for ext in texExts:
+				if ext in newTexName:
+					newTexName = newTexName.replace(ext, "")
+
 	ext = ".tex." + str(version_no)
+
 	if not rapi.checkFileExists(newTexName + ext):
 		for other_ext, subDict in extToFormat.items():
 			if rapi.checkFileExists(newTexName + ".tex." + other_ext):
 				ext = ".tex." + other_ext
 	return newTexName + ext, ext
-	
+
 def convertTexVersion(version_no): #because RE3R and RE4R randomly decide to use timestamps for version numbers, which doesnt work well with using the others as versions
 	if version_no == 143221013:
 		return 36
